@@ -6,12 +6,12 @@
       = {{ result }}
     </div>
     <div class="keyboard">
-      <button @click="res($event)">+</button>
-      <button @click="res($event)">-</button>
-      <button @click="res($event)">*</button>
-      <button @click="res($event)">/</button>
-      <button @click="res($event)">**</button>
-      <button @click="res($event)">деление без остатка</button>
+      <button @click="res($event)" :disabled="disabledAllButton">+</button>
+      <button @click="res($event)" :disabled="disabledAllButton">-</button>
+      <button @click="res($event)" :disabled="disabledAllButton">*</button>
+      <button @click="res($event)" :disabled="disabledAllButton">/</button>
+      <button @click="res($event)" :disabled="disabledAllButton">**</button>
+      <button @click="res($event)" :disabled="disabledAllButton">деление без остатка</button>
     </div>
   </div>
 </template>
@@ -32,6 +32,16 @@
         } else
         return this.result = eval(`${this.operand1 + event.target.innerText + this.operand2}`);
       },
+    },
+
+    computed: {
+      disabledAllButton: function () {
+        if ((this.operand1.length != 0 && this.operand2.length != 0) && 
+        ((typeof this.operand1 == "number") && (typeof this.operand2 == "number"))) {
+          return false;
+        }
+        return true;
+      }
     }
   }
 </script>
