@@ -1,42 +1,72 @@
 <template>
-  <div>
-    <div class="display">
-      <input v-model.number="operand1" placeholder="введите число"/>
-      <input v-model.number="operand2" placeholder="введите число"/>
-      = {{ result }}
-    </div>
-    <div class="keyboard">
-      <button @click="res($event)">+</button>
-      <button @click="res($event)">-</button>
-      <button @click="res($event)">*</button>
-      <button @click="res($event)">/</button>
-      <button @click="res($event)">**</button>
-      <button @click="res($event)">деление без остатка</button>
-    </div>
+  <div id="app">
+    <header>
+      <div>My personal costs</div>
+    </header>
+    <main>
+      <NewCost @changeFormVisible="changeFormVisible"/>
+      <PaymentForm v-if="showForm" @addPayment="addPayment"/>
+      <PaymentsList :payments="paymentsList"/>
+    </main>
   </div>
 </template>
 
 <script>
+import PaymentForm from './components/PaymentForm';
+import PaymentsList from './components/PaymentsList';
+import NewCost from './components/NewCost';
+
   export default {
-    name: 'calculator',
+    name: 'app',
+    components: {
+    PaymentsList,
+    PaymentForm,
+    NewCost
+  },
+
     data: () => ({
-        operand1: '',
-        operand2: '', 
-        result: 0
+       paymentsList: [],
+       showForm: false
     }),
 
     methods: {
-      res(event) {
-        if (event.target.innerText == "деление без остатка") {
-          return this.result = Math.floor(this.operand1 / this.operand2);
-        } else
-        return this.result = eval(`${this.operand1 + event.target.innerText + this.operand2}`);
+      fetchData() {
+        return [
+          {
+            date: '28.03.2020',
+            category: 'Food',
+            price: 169,
+          },
+          {
+            date: '24.03.2020',
+            category: 'Transport',
+            price: 360,
+          },
+          {
+            date: '24.03.2020',
+            category: 'Food',
+            price: 532,
+          }
+        ]
       },
-    }
+
+      changeFormVisible(isVisible) {
+        this.showForm = isVisible
+      },
+
+      addPayment(data) {
+        this.paymentsList = [...this.paymentsList, data]
+      }
+    },
+
+    created () {
+      this.paymentsList = this.fetchData()
+    },
+
   }
 </script>
 
-// <style lang="scss">
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -44,5 +74,10 @@
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+// for develop
+a, table, td, th, tr, div, header, main {
+  border: 1px solid red;
 }
 </style>
