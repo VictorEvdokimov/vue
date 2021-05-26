@@ -6,8 +6,6 @@
 
 <script>
 export default {
-  props: {},
-
   data: () => ({
     isVisible: false,
   }),

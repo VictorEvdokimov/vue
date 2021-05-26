@@ -16,10 +16,17 @@
 </template>
  
 <script>
+import { mapGetters } from "vuex";
 export default {
-  props: {
-    payments: Array
-  }
+  // props: {
+  //   payments: Array
+  // }
+  computed: {
+    ...mapGetters({
+      payments: "getPaymentsList",
+    }),
+  },
+
 }
 </script>
 <style lang="scss" module>

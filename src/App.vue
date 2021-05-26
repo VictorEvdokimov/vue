@@ -1,69 +1,48 @@
 <template>
-  <div id="app">
+  <div>
     <header>
       <div>My personal costs</div>
     </header>
     <main>
-      <NewCost @changeFormVisible="changeFormVisible"/>
-      <PaymentForm v-if="showForm" @addPayment="addPayment"/>
-      <PaymentsList :payments="paymentsList"/>
+      <NewCost @changeFormVisible="changeFormVisible" />
+      <PaymentForm v-if="showForm" />
+      <PaymentsList />
+      <PaymentsDisplay />
     </main>
   </div>
 </template>
 
 <script>
-import PaymentForm from './components/PaymentForm';
-import PaymentsList from './components/PaymentsList';
-import NewCost from './components/NewCost';
+import PaymentForm from "./components/PaymentForm";
+import PaymentsList from "./components/PaymentsList";
+import NewCost from "./components/NewCost";
+import PaymentsDisplay from "./components/PaymentsDisplay";
+import { mapActions } from "vuex";
 
-  export default {
-    name: 'app',
-    components: {
+export default {
+  name: "app",
+  components: {
     PaymentsList,
     PaymentForm,
-    NewCost
+    NewCost,
+    PaymentsDisplay,
   },
 
-    data: () => ({
-       paymentsList: [],
-       showForm: false
-    }),
+  data: () => ({
+    showForm: false,
+  }),
 
-    methods: {
-      fetchData() {
-        return [
-          {
-            date: '28.03.2020',
-            category: 'Food',
-            price: 169,
-          },
-          {
-            date: '24.03.2020',
-            category: 'Transport',
-            price: 360,
-          },
-          {
-            date: '24.03.2020',
-            category: 'Food',
-            price: 532,
-          }
-        ]
-      },
-
-      changeFormVisible(isVisible) {
-        this.showForm = isVisible
-      },
-
-      addPayment(data) {
-        this.paymentsList = [...this.paymentsList, data]
-      }
+  methods: {
+    changeFormVisible(isVisible) {
+      this.showForm = isVisible;
     },
+    ...mapActions(["fetchData"]),
+  },
 
-    created () {
-      this.paymentsList = this.fetchData()
-    },
-
-  }
+  mounted() {
+    this.fetchData();
+  },
+};
 </script>
 
 <style lang="scss">
@@ -77,7 +56,14 @@ import NewCost from './components/NewCost';
 }
 
 // for develop
-a, table, td, th, tr, div, header, main {
+a,
+table,
+td,
+th,
+tr,
+div,
+header,
+main {
   border: 1px solid red;
 }
 </style>
