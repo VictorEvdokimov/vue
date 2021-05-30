@@ -1,48 +1,73 @@
 <template>
-  <div>
-    <div class="display">
-      <input v-model.number="operand1" placeholder="введите число"/>
-      <input v-model.number="operand2" placeholder="введите число"/>
-      = {{ result }}
-    </div>
-    <div class="keyboard">
-      <button @click="res($event)">+</button>
-      <button @click="res($event)">-</button>
-      <button @click="res($event)">*</button>
-      <button @click="res($event)">/</button>
-      <button @click="res($event)">**</button>
-      <button @click="res($event)">деление без остатка</button>
-    </div>
+  <div id="main">
+    <header>
+      <div >My personal costs</div>
+    </header>
+    <main>
+      <NewCost @changeFormVisible="changeFormVisible" />
+      <PaymentForm v-if="showForm" />
+      <PaymentsList />
+      <PaymentsDisplay />
+    </main>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'calculator',
-    data: () => ({
-        operand1: '',
-        operand2: '', 
-        result: 0
-    }),
+import PaymentForm from "./components/PaymentForm";
+import PaymentsList from "./components/PaymentsList";
+import NewCost from "./components/NewCost";
+import PaymentsDisplay from "./components/PaymentsDisplay";
+import { mapActions } from "vuex";
 
-    methods: {
-      res(event) {
-        if (event.target.innerText == "деление без остатка") {
-          return this.result = Math.floor(this.operand1 / this.operand2);
-        } else
-        return this.result = eval(`${this.operand1 + event.target.innerText + this.operand2}`);
-      },
-    }
-  }
+export default {
+  name: "app",
+  components: {
+    PaymentsList,
+    PaymentForm,
+    NewCost,
+    PaymentsDisplay,
+  },
+
+  data: () => ({
+    showForm: false,
+  }),
+
+  methods: {
+    changeFormVisible(isVisible) {
+      this.showForm = isVisible;
+    },
+    ...mapActions(["fetchData"]),
+  },
+
+  mounted() {
+    this.fetchData();
+  },
+};
 </script>
 
-// <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<style lang="scss">
+#main {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+}
+
+.title {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+
+
+a,
+table,
+td,
+th,
+tr,
+div,
+header,
+main {
+  border: 1px solid red;
 }
 </style>
