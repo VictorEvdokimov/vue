@@ -1,7 +1,6 @@
 <template>
   <div>
     <input placeholder="Date" v-model="date" />
-    <!-- <input placeholder="Category" v-model="category" /> -->
     <select v-model="category">
       <option v-for="option in getCategoryList" :key="option" :value="option">
         {{ option }}
