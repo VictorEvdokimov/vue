@@ -1,11 +1,11 @@
 <template>
   <div>
-    <span :class="[$style.paginationElement]" @click="previousePage" v-if="currentPage > 1">&lt;&lt;</span>
-    <span :class="{[$style.paginationElement]: true, [$style.paginationElementCurrent]: page+1 == currentPage}" :pageNumber="page + 1" @click="selectPage" v-for="page in pageArray" :key="page">
-      {{ page + 1 }}
-      <span v-if="page + 1 != pageCount"> | </span>
+    <span :class="[$style.paginationElement]" @click="previousePage" v-if="currentPage > 1">&lt;&lt; </span>
+    <span v-for="page in pageArray" :key="page">
+      <span :class="{[$style.paginationElement]: true, [$style.paginationElementCurrent]: page+1 == currentPage}" :pageNumber="page + 1" @click="selectPage">{{ page + 1 }}</span>
+      <span   v-if="page + 1 != pageCount"> | </span>
     </span>
-    <span :class="[$style.paginationElement]" @click="nextPage" v-if="pageCount > currentPage">&gt;&gt;</span>
+    <span :class="[$style.paginationElement]" @click="nextPage" v-if="pageCount > currentPage"> &gt;&gt;</span>
   </div>
 </template>
 

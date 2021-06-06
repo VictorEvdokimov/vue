@@ -1,64 +1,57 @@
 <template>
   <div id="main">
     <header>
-      <div >My personal costs</div>
+      <router-link :to="{name: 'dashboard', params: {page: 1}}">Dashboard</router-link>
+      <router-link to="/about">About</router-link>
+      <router-link to="/unknown">Unknown</router-link>
     </header>
     <main>
-      <NewCost @changeFormVisible="changeFormVisible" />
-      <PaymentForm v-if="showForm" />
-      <PaymentsList />
-      <PaymentsDisplay />
+      <router-view/>
     </main>
   </div>
 </template>
 
 <script>
-import PaymentForm from "./components/PaymentForm";
-import PaymentsList from "./components/PaymentsList";
-import NewCost from "./components/NewCost";
-import PaymentsDisplay from "./components/PaymentsDisplay";
 import { mapActions } from "vuex";
 
 export default {
   name: "app",
-  components: {
-    PaymentsList,
-    PaymentForm,
-    NewCost,
-    PaymentsDisplay,
-  },
 
   data: () => ({
-    showForm: false,
   }),
 
   methods: {
-    changeFormVisible(isVisible) {
-      this.showForm = isVisible;
-    },
-    ...mapActions(["fetchData"]),
+    ...mapActions({
+      fetchData: 'fetchData'
+    }),
+    
+  },
+
+  created() {
+    if (this.$route.name == undefined) {
+      this.$route.push({path: '/dashboard/1'});
+    }
   },
 
   mounted() {
-    this.fetchData();
-  },
+    this.fetchData();    
+  }
 };
 </script>
 
 <style lang="scss">
 #main {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 
 .title {
   text-align: center;
 }
-
 
 a,
 table,

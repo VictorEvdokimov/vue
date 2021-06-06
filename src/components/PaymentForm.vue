@@ -38,6 +38,7 @@ export default {
   methods: {
     ...mapMutations({
       addDataToPaymentsList: "addDataToPaymentsList",
+      setCategories: "setCategories",
     }),
 
     onSaveClick() {
@@ -51,9 +52,33 @@ export default {
     ...mapActions(["loadCategories"]),
   },
 
+  created() {},
+
   mounted() {
     if (!this.getCategoryList.length) {
-      this.loadCategories();
+      this.loadCategories().then(() => {
+        if (this.$route.name == "addPaymentDefault") {
+          this.date = this.getCurrentDate;
+          const category = this.$route.params.category;
+
+          if (!this.getCategoryList.includes(category)) {
+            this.setCategories(category);
+          }
+          this.category = category;
+
+          if (this.$route.query.price) {
+            this.price = +this.$route.query.price;
+            this.onSaveClick();
+          }
+        }
+        
+        if(this.$route.name == "addPaymentWihtoutCategory") {
+          this.date = this.getCurrentDate;
+          if (this.$route.query.price) {
+            this.price = +this.$route.query.price;
+          }
+        }
+      }); 
     }
   },
 };

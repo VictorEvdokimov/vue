@@ -40,7 +40,7 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         setTimeout(() => {
           const item = [];
-          for (let i=1; i<105; i++) {
+          for (let i = 1; i < 25; i++) {
             item.push({
               date: '24.03.2020',
               category: 'Transport',
@@ -64,6 +64,6 @@ export default new Vuex.Store({
         .then(res => {
           commit('setCategories', res)
         })
-    },  
+    },
   },
 })
