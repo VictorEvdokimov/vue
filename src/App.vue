@@ -1,48 +1,66 @@
 <template>
-  <div>
-    <div class="display">
-      <input v-model.number="operand1" placeholder="введите число"/>
-      <input v-model.number="operand2" placeholder="введите число"/>
-      = {{ result }}
-    </div>
-    <div class="keyboard">
-      <button @click="res($event)">+</button>
-      <button @click="res($event)">-</button>
-      <button @click="res($event)">*</button>
-      <button @click="res($event)">/</button>
-      <button @click="res($event)">**</button>
-      <button @click="res($event)">деление без остатка</button>
-    </div>
+  <div id="main">
+    <header>
+      <router-link :to="{name: 'dashboard', params: {page: 1}}">Dashboard</router-link>
+      <router-link to="/about">About</router-link>
+      <router-link to="/unknown">Unknown</router-link>
+    </header>
+    <main>
+      <router-view/>
+    </main>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'calculator',
-    data: () => ({
-        operand1: '',
-        operand2: '', 
-        result: 0
-    }),
+import { mapActions } from "vuex";
 
-    methods: {
-      res(event) {
-        if (event.target.innerText == "деление без остатка") {
-          return this.result = Math.floor(this.operand1 / this.operand2);
-        } else
-        return this.result = eval(`${this.operand1 + event.target.innerText + this.operand2}`);
-      },
+export default {
+  name: "app",
+
+  data: () => ({
+  }),
+
+  methods: {
+    ...mapActions({
+      fetchData: 'fetchData'
+    }),
+    
+  },
+
+  created() {
+    if (this.$route.name == undefined) {
+      this.$route.push({path: '/dashboard/1'});
     }
+  },
+
+  mounted() {
+    this.fetchData();    
   }
+};
 </script>
 
-// <style lang="scss">
-#app {
+<style lang="scss">
+#main {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.title {
+  text-align: center;
+}
+
+a,
+table,
+td,
+th,
+tr,
+div,
+header,
+main {
+  border: 1px solid red;
 }
 </style>
