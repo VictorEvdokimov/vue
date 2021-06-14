@@ -5,6 +5,11 @@
 </template>
 
 <script>
+import Vue from "vue";
+import ModalWindowPlugin from "../plugins/ModalWindow"; 
+
+Vue.use(ModalWindowPlugin);
+
 export default {
   data: () => ({
     isVisible: false,
@@ -20,6 +25,7 @@ export default {
       }
 
       this.$emit("changeFormVisible", this.isVisible);
+      this.$modal.show("PaymentForm", {})
     },
   },
 };
