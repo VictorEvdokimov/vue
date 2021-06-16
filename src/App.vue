@@ -10,18 +10,20 @@
     <main>
       <router-view />
     </main>
-    <ModalWindow
-      v-if="ModalWindoW"
-      :ModalWindoW="ModalWindoW"
-      :modalWindowSettings="modalWindowSettings"
-    />
+    <transition name="fade">
+      <ModalWindow
+        v-if="ModalWindoW"
+        :ModalWindoW="ModalWindoW"
+        :modalWindowSettings="modalWindowSettings"
+      />
+    </transition>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
 import { mapActions } from "vuex";
-import ModalWindowPlugin from "./plugins/ModalWindow"; 
+import ModalWindowPlugin from "./plugins/ModalWindow";
 import ModalWindow from "./components/ModalWindow";
 
 Vue.use(ModalWindowPlugin);
@@ -46,7 +48,7 @@ export default {
     onShown(settings) {
       this.ModalWindoW = settings.name;
       this.modalWindowSettings = settings;
-      console.log(settings)
+      console.log(settings);
     },
     onHide() {
       this.ModalWindoW = "";
@@ -62,8 +64,8 @@ export default {
 
   mounted() {
     this.fetchData();
-    this.$modal.EventBus.$on('show', this.onShown)
-    this.$modal.EventBus.$on('hide', this.onHide)
+    this.$modal.EventBus.$on("show", this.onShown);
+    this.$modal.EventBus.$on("hide", this.onHide);
   },
 };
 </script>
@@ -81,6 +83,15 @@ export default {
 .title {
   text-align: center;
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+ 
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 
 a,
 table,

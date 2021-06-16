@@ -25,7 +25,6 @@ export default {
       }
 
       this.$emit("changeFormVisible", this.isVisible);
-      this.$modal.show("PaymentForm", {})
     },
   },
 };
