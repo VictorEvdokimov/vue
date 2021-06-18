@@ -15,6 +15,13 @@
 import { mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
+  props: {
+    itemId: {
+      type: Number,
+      require: false
+    }
+  },
+
   data() {
     return {
       date: null,

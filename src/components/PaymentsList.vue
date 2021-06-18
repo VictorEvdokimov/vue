@@ -8,11 +8,17 @@
         <td>Price</td>
       </tr>
       <tr v-for="(payment, i) in getPage" :key="i">
-        <td :class="[$style.wrapPaymentsListCell]">{{ i + 1}}</td>
+        <td :class="[$style.wrapPaymentsListCell]">{{ i + 1 }}</td>
         <td :class="[$style.wrapPaymentsListCell]">{{ payment.date }}</td>
         <td :class="[$style.wrapPaymentsListCell]">{{ payment.category }}</td>
-        <td :class="[$style.wrapPaymentsListCell]">{{ payment.price * 3}}</td>
-        <td :class="[$style.menuSettingButton]" @click="showPopup" :paymentListId="i">...</td>
+        <td :class="[$style.wrapPaymentsListCell]">{{ payment.price * 3 }}</td>
+        <td
+          :class="[$style.menuSettingButton]"
+          @click="showPopup"
+          :paymentListId="(page-1)*n+i"
+        >
+          ...
+        </td>
       </tr>
     </table>
     <Pagination
@@ -24,10 +30,10 @@
 </template>
  
 <script>
-import Vue from 'vue';
+import Vue from "vue";
 import Pagination from "./Pagination";
 import { mapGetters } from "vuex";
-import ModalWindowPlugin from "../plugins/ModalWindow"; 
+import ModalWindowPlugin from "../plugins/ModalWindow";
 
 Vue.use(ModalWindowPlugin);
 
@@ -40,7 +46,6 @@ export default {
     return {
       page: 1,
       n: 10,
-      currentPopupElement: {}
     };
   },
 
@@ -50,15 +55,14 @@ export default {
     },
 
     showPopup($event) {
-      if (this.currentPopupElement == $event.target) {
-        this.currentPopupElement = {};
-        this.$modal.hide();
-      } else {
-        const rect = $event.target.getBoundingClientRect();
-        this.$modal.show("PaymentForm", {xPosition: rect.left, yPosition: rect.top, paymentListId: $event.target.paymentListId})
-        this.currentPopupElement = $event.target;
-      }
-    }
+      const rect = $event.target.getBoundingClientRect();
+      this.$modal.show("ContextMenu", {
+        xPosition: `${rect.left - 98}px`,
+        yPosition: `${rect.top + 10}px`,
+        width: `${100}px`,
+        paymentListId: $event.target.getAttribute('paymentlistid'),
+      });
+    },
   },
 
   computed: {
@@ -91,5 +95,10 @@ export default {
 
 .menuSettingButton {
   width: 20px;
+}
+
+.menuSettingButton:hover {
+  background-color: rgb(212, 235, 245);
+  cursor: pointer;
 }
 </style>

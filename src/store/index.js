@@ -24,6 +24,10 @@ export default new Vuex.Store({
       }
       state.categoryList.push(...payload)
     },
+
+    deletePayment(state, id) {
+      state.paymentsList.splice(id, 1)
+    }
   },
 
   getters: {

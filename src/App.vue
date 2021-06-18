@@ -22,11 +22,13 @@
 
 <script>
 import Vue from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import ModalWindowPlugin from "./plugins/ModalWindow";
+import CrudPlugin from "./plugins/StoreEvent";
 import ModalWindow from "./components/ModalWindow";
 
 Vue.use(ModalWindowPlugin);
+Vue.use(CrudPlugin);
 
 export default {
   name: "app",
@@ -48,12 +50,26 @@ export default {
     onShown(settings) {
       this.ModalWindoW = settings.name;
       this.modalWindowSettings = settings;
-      console.log(settings);
     },
+
     onHide() {
       this.ModalWindoW = "";
       this.modalWindowSettings = {};
     },
+
+    savePayment(obj) {
+      console.log(obj)
+    },
+
+    updatePayment(id, obj) {
+      console.log(obj, id)
+    },
+
+    deletePayment(id) {
+      this.deletePaymentVuex(id) 
+    },
+
+    ...mapMutations({deletePaymentVuex:"deletePayment"})
   },
 
   created() {
@@ -66,6 +82,9 @@ export default {
     this.fetchData();
     this.$modal.EventBus.$on("show", this.onShown);
     this.$modal.EventBus.$on("hide", this.onHide);
+    this.$crud.EventBus.$on("save", this.savePayment);
+    this.$crud.EventBus.$on("update", this.updatePayment);
+    this.$crud.EventBus.$on("delete", this.deletePayment);
   },
 };
 </script>
@@ -84,14 +103,15 @@ export default {
   text-align: center;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .3s;
-}
- 
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
 }
 
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 
 a,
 table,
