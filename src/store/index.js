@@ -31,7 +31,8 @@ export default new Vuex.Store({
 
     setPayment(state, obj) {
       console.log(obj)
-      state.paymentsList[obj.itemId] = obj; 
+      state.paymentsList[obj.itemId] = { date: obj.date, category: obj.category, price: obj.price };
+      state.paymentsList = [...state.paymentsList];
     }
   },
 
@@ -40,9 +41,7 @@ export default new Vuex.Store({
     getFullPaymentValue: state => {
       return state.paymentsList.reduce((res, cur) => res + cur.price, 0)
     },
-
     getCategoryList: state => state.categoryList,
-    
   },
 
   actions: {

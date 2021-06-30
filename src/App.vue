@@ -45,6 +45,7 @@ export default {
   methods: {
     ...mapActions({
       fetchData: "fetchData",
+      loadCategories: "loadCategories"
     }),
 
     onShown(settings) {
@@ -58,18 +59,24 @@ export default {
     },
 
     savePayment(obj) {
-      console.log(obj)
+      console.log(obj);
+      this.addDataToPaymentsList(obj);
     },
 
-    updatePayment(id, obj) {
-      console.log(obj, id)
+    updatePayment(itemId, obj) {
+      console.log(obj, itemId);
+      this.setPayment({itemId, ...obj})
     },
 
     deletePayment(id) {
-      this.deletePaymentVuex(id) 
+      this.deletePaymentVuex(id);
     },
 
-    ...mapMutations({deletePaymentVuex:"deletePayment"})
+    ...mapMutations({
+      deletePaymentVuex: "deletePayment",
+      addDataToPaymentsList: "addDataToPaymentsList",
+      setPayment: "setPayment",
+    }),
   },
 
   created() {
@@ -80,6 +87,8 @@ export default {
 
   mounted() {
     this.fetchData();
+    this.loadCategories();
+
     this.$modal.EventBus.$on("show", this.onShown);
     this.$modal.EventBus.$on("hide", this.onHide);
     this.$crud.EventBus.$on("save", this.savePayment);

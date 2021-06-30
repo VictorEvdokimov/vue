@@ -12,7 +12,13 @@
 </template>
  
 <script>
-import { mapMutations, mapActions, mapGetters } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
+import Vue from "vue";
+import ModalWindowPlugin from "../plugins/ModalWindow";
+import CrudPlugin from "../plugins/StoreEvent";
+
+Vue.use(ModalWindowPlugin);
+Vue.use(CrudPlugin);
 
 export default {
   props: {
@@ -47,9 +53,7 @@ export default {
 
   methods: {
     ...mapMutations({
-      addDataToPaymentsList: "addDataToPaymentsList",
       setCategories: "setCategories",
-      setPayment: "setPayment",
     }),
 
     onSaveClick() {
@@ -60,48 +64,44 @@ export default {
         price,
       };
       if (this.itemId == null) {
-        this.addDataToPaymentsList(item);
+        this.$crud.save(item);
       } else {
-        this.setPayment({itemId, ...item});
+        this.$crud.update(itemId, item);
+        this.$modal.hide();
       }
     },
-    ...mapActions(["loadCategories"]),
   },
 
   mounted() {
-    if (!this.getCategoryList.length) {
-      this.loadCategories().then(() => {
-        if (this.$route.name == "addPaymentDefault") {
-          this.date = this.getCurrentDate;
-          const category = this.$route.params.category;
+    if (this.$route.name == "addPaymentDefault") {
+      this.date = this.getCurrentDate;
+      const category = this.$route.params.category;
 
-          if (!this.getCategoryList.includes(category)) {
-            this.setCategories(category);
-          }
-          this.category = category;
+      if (!this.getCategoryList.includes(category)) {
+        this.setCategories(category);
+      }
+      this.category = category;
 
-          if (this.$route.query.price) {
-            this.price = +this.$route.query.price;
-            this.onSaveClick();
-          }
-        }
+      if (this.$route.query.price) {
+        this.price = +this.$route.query.price;
+        this.onSaveClick();
+      }
+    }
 
-        if (this.$route.name == "addPaymentWihtoutCategory") {
-          this.date = this.getCurrentDate;
-          if (this.$route.query.price) {
-            this.price = +this.$route.query.price;
-          }
-        }
+    if (this.$route.name == "addPaymentWihtoutCategory") {
+      this.date = this.getCurrentDate;
+      if (this.$route.query.price) {
+        this.price = +this.$route.query.price;
+      }
+    }
 
-        if (this.itemId != null) {
-          const paymentList = this.getPaymentList;
-          const payment = paymentList[this.itemId];
-          console.log(payment);
-          this.date = payment.date;
-          this.category = payment.category;
-          this.price = payment.price;
-        }
-      });
+    if (this.itemId != null) {
+      const paymentList = this.getPaymentList;
+      const payment = paymentList[this.itemId];
+      console.log(payment);
+      this.date = payment.date;
+      this.category = payment.category;
+      this.price = payment.price;
     }
   },
 };
