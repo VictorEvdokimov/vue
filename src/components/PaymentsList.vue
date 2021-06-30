@@ -11,7 +11,7 @@
         <td :class="[$style.wrapPaymentsListCell]">{{ i + 1 }}</td>
         <td :class="[$style.wrapPaymentsListCell]">{{ payment.date }}</td>
         <td :class="[$style.wrapPaymentsListCell]">{{ payment.category }}</td>
-        <td :class="[$style.wrapPaymentsListCell]">{{ payment.price * 3 }}</td>
+        <td :class="[$style.wrapPaymentsListCell]">{{ payment.price }}</td>
         <td
           :class="[$style.menuSettingButton]"
           @click="showPopup"

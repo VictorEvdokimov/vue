@@ -18,8 +18,8 @@ export default {
   props: {
     itemId: {
       type: Number,
-      require: false
-    }
+      require: false,
+    },
   },
 
   data() {
@@ -39,27 +39,34 @@ export default {
       return `${d}.${m}.${y}`;
     },
 
-    ...mapGetters(["getCategoryList"]),
+    ...mapGetters({
+      getCategoryList: "getCategoryList",
+      getPaymentList: "getPaymentsList",
+    }),
   },
 
   methods: {
     ...mapMutations({
       addDataToPaymentsList: "addDataToPaymentsList",
       setCategories: "setCategories",
+      setPayment: "setPayment",
     }),
 
     onSaveClick() {
-      const { date, category, price } = this;
-      this.addDataToPaymentsList({
+      const { itemId, date, category, price } = this;
+      const item = {
         date: date || this.getCurrentDate,
         category,
         price,
-      });
+      };
+      if (this.itemId == null) {
+        this.addDataToPaymentsList(item);
+      } else {
+        this.setPayment({itemId, ...item});
+      }
     },
     ...mapActions(["loadCategories"]),
   },
-
-  created() {},
 
   mounted() {
     if (!this.getCategoryList.length) {
@@ -78,14 +85,23 @@ export default {
             this.onSaveClick();
           }
         }
-        
-        if(this.$route.name == "addPaymentWihtoutCategory") {
+
+        if (this.$route.name == "addPaymentWihtoutCategory") {
           this.date = this.getCurrentDate;
           if (this.$route.query.price) {
             this.price = +this.$route.query.price;
           }
         }
-      }); 
+
+        if (this.itemId != null) {
+          const paymentList = this.getPaymentList;
+          const payment = paymentList[this.itemId];
+          console.log(payment);
+          this.date = payment.date;
+          this.category = payment.category;
+          this.price = payment.price;
+        }
+      });
     }
   },
 };

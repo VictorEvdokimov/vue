@@ -27,6 +27,11 @@ export default new Vuex.Store({
 
     deletePayment(state, id) {
       state.paymentsList.splice(id, 1)
+    },
+
+    setPayment(state, obj) {
+      console.log(obj)
+      state.paymentsList[obj.itemId] = obj; 
     }
   },
 
@@ -37,6 +42,7 @@ export default new Vuex.Store({
     },
 
     getCategoryList: state => state.categoryList,
+    
   },
 
   actions: {
@@ -48,7 +54,7 @@ export default new Vuex.Store({
             item.push({
               date: '24.03.2020',
               category: 'Transport',
-              price: i,
+              price: i * 2,
             })
           }
           resolve(item)
